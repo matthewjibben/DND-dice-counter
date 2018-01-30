@@ -1,14 +1,3 @@
-import numpy
-import matplotlib.pyplot as plt
-import math
-import tkinter
-
-
-def addToCount(dict, val):
-    if val in dict:
-        dict[val] += 1
-    else:
-        dict[val] = 1
 # get user input for these variables
 sideCount = 6
 diceCount = 2
