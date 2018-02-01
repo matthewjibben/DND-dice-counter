@@ -28,15 +28,33 @@ def diceValueCounter(sideCount, diceCount, modifier):
     return totalValues
 
 
+def getProbs(totalValues):
+    aggregate = sum(totalValues.values())
+    probs = []
+    for i in totalValues:
+        probs.append(totalValues[i]/aggregate*100)
+    return probs
+
+
 def showVals(sideCount, diceCount, modifier):
     vals = diceValueCounter(sideCount, diceCount, modifier)
     # set up bar graph
+    plt.figure(0)
     plt.bar(range(len(vals)), vals.values(), align='center')
     plt.xticks(range(len(vals)), list(vals.keys()))
     # make labels and enable grid
     plt.xlabel("Roll value")
     plt.ylabel("Combination amount")
     plt.grid(True)
+
+    # get data for pie chart
+    sizes = getProbs(vals)
+    labels = tuple(vals.keys())
+    # now set up the pie chart
+    plt.figure(1)
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True)
+    plt.axis('equal')
+    # show both charts
     plt.show()
 
 # setup tkinter window, size, and title
@@ -70,4 +88,4 @@ tk.Button(inputWindow, text="exit", command=inputWindow.quit, width=16, height=2
 
 tk.mainloop()
 
-# print(diceValueCounter(6, 2, 0))
+print(diceValueCounter(6, 2, 0))
