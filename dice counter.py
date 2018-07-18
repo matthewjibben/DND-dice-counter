@@ -1,5 +1,6 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
+import dictStats as ds
 
 
 def diceValueCounter(sideCount, diceCount, modifier):
@@ -36,6 +37,14 @@ def getProbs(totalValues):
     return probs
 
 
+def makeTextWindow(text):
+    texty = tk.Tk()
+    # set the width to be the maximum line length or at least 60 and the height to be up to 20
+    T = tk.Text(texty, height=min(20, text.count("\n")+1), width=max(len(max(text.split("\n"), key=len)), 60))
+    T.pack()
+    T.insert(tk.END, text)
+
+
 def showVals(sideCount, diceCount, modifier):
     vals = diceValueCounter(sideCount, diceCount, modifier)
     # set up bar graph
@@ -54,8 +63,21 @@ def showVals(sideCount, diceCount, modifier):
     plt.figure(1)
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True)
     plt.axis('equal')
-    # show both charts
+    # plt.show()
+
+    # making text window to display average value, min, max, and percentages
+    message = f"""The average roll is {ds.dmean(vals)}
+The lowest roll is {min(vals)} and the highest is {max(vals)}
+=========================================="""
+    # loop through each roll value and add its statistics to the message
+    for key, val in sorted(vals.items(), key=lambda i: i[1], reverse=True):
+        message += "\n{"+f"Roll: {key} Chance: {round(val/ds.totalRolls(vals)*100, 2)}% Combinations: {val}"+"}"
+    makeTextWindow(message)
+
+    # show the matplotlib charts
+    # this must happen after displaying the second tkinter window, not before
     plt.show()
+
 
 # setup tkinter window, size, and title
 inputWindow = tk.Tk()
@@ -84,8 +106,8 @@ modi.insert(0, 0)
 tk.Button(inputWindow, text="Calculate",
           command=lambda: showVals(int(sides.get()), int(dice.get()), int(modi.get())),
           width=15, height=2).grid(row=3, column=0)
-tk.Button(inputWindow, text="exit", command=inputWindow.quit, width=16, height=2).grid(row=3, column=1)
+tk.Button(inputWindow, text="exit", command=inputWindow.destroy, width=16, height=2).grid(row=3, column=1)
 
 tk.mainloop()
 
-print(diceValueCounter(6, 2, 0))
+#print(diceValueCounter(6, 2, 0))

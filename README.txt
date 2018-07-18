@@ -7,3 +7,4 @@ Future features to add:
 I plan to add a gui for user input using the 'tkinter' library, and have a graphical display of the results using 'matplotlib.pyplot'
 (completed)
 possibly display the probabilities of each roll as a pie chart, or list all values and their percent probabilities
+(completed)
